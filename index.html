@@ -1,0 +1,1033 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Photography Portfolio — Etéreo</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --ink:#1f1f1f;
+      --muted:#6e6e6e;
+      --paper:#f4f4f1;
+      --white:#ffffff;
+      --olive:#59653a;
+      --olive-2:#3f4a2a;
+      --line:rgba(31,31,31,.18);
+      --shadow: 0 22px 70px rgba(0,0,0,.12);
+      --radius: 18px;
+      --max: 1180px;
+    }
+
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family: Inter, system-ui, -apple-system, "Segoe UI", Arial, sans-serif;
+      color:var(--ink);
+      background:
+        radial-gradient(900px 520px at 70% 10%, rgba(89,101,58,.08), transparent 62%),
+        radial-gradient(900px 520px at 10% 92%, rgba(89,101,58,.06), transparent 62%),
+        linear-gradient(180deg, var(--paper), #fff 55%, #f3f3ef);
+      overflow-x:hidden;
+      cursor:none; /* 交給 custom cursor */
+    }
+
+    /* ===== Custom Cursor ===== */
+    .cursor{
+      position:fixed;
+      left:0; top:0;
+      width: 34px; height: 34px;
+      border: 1px solid rgba(89,101,58,.55);
+      border-radius: 999px;
+      pointer-events:none;
+      transform: translate(-50%, -50%);
+      z-index: 9999;
+      mix-blend-mode: multiply;
+      transition: width .18s ease, height .18s ease, border-color .18s ease, background .18s ease;
+      background: rgba(255,255,255,.0);
+      backdrop-filter: blur(0px);
+    }
+    .cursor::after{
+      content:"";
+      position:absolute;
+      left:50%; top:50%;
+      width: 4px; height: 4px;
+      background: rgba(89,101,58,.9);
+      border-radius: 999px;
+      transform: translate(-50%, -50%);
+    }
+    .cursor.hover{
+      width: 46px; height: 46px;
+      border-color: rgba(89,101,58,.85);
+      background: rgba(255,255,255,.08);
+      backdrop-filter: blur(6px);
+    }
+    .cursor.hidden{ opacity:0; }
+
+    /* ===== Layout ===== */
+    .wrap{
+      max-width:var(--max);
+      margin:0 auto;
+      padding: 42px 22px 28px;
+      position:relative;
+      min-height:100vh;
+      display:flex;
+      flex-direction:column;
+      gap: 22px;
+    }
+
+    /* corner decorations like reference */
+    .decor{
+      position:absolute;
+      inset:0;
+      pointer-events:none;
+      z-index: 0;
+    }
+    .branch{
+      position:absolute;
+      opacity:.92;
+      filter: drop-shadow(0 24px 34px rgba(0,0,0,.18));
+    }
+    .branch.tr{ top:-10px; right:-10px; width:min(430px, 42vw); transform: rotate(2deg); }
+    .branch.bl{ bottom:62px; left:-26px; width:min(380px, 38vw); transform: rotate(-8deg); opacity:.88; }
+    .leaf-float{
+      position:absolute;
+      width: 44px; height: 44px;
+      border-radius: 60% 40% 55% 45% / 55% 45% 55% 45%;
+      background:
+        radial-gradient(circle at 30% 30%, rgba(255,255,255,.35), transparent 55%),
+        radial-gradient(circle at 70% 70%, rgba(0,0,0,.12), transparent 60%),
+        linear-gradient(135deg, rgba(89,101,58,.95), rgba(89,101,58,.48));
+      opacity:.85;
+      box-shadow: 0 18px 44px rgba(0,0,0,.18);
+    }
+    .leaf-float.l1{ top: 160px; left: 50.5%; transform: translateX(-50%) rotate(-16deg) scale(.75); }
+    .leaf-float.l2{ top: 230px; right: 220px; transform: rotate(18deg) scale(.65); opacity:.55; }
+    .leaf-float.l3{ bottom: 210px; right: 90px; transform: rotate(-20deg) scale(.6); opacity:.45; }
+
+    /* top spacing layer */
+    .top{
+      display:flex;
+      justify-content:space-between;
+      align-items:flex-start;
+      gap: 18px;
+      position:relative;
+      z-index: 2;
+    }
+
+    /* left title like reference */
+    .brand{
+      display:flex;
+      flex-direction:column;
+      gap: 10px;
+      max-width: 360px;
+    }
+    .brand h1{
+      margin:0;
+      font-family:"Playfair Display", serif;
+      font-weight:600;
+      letter-spacing:.02em;
+      color:var(--olive);
+      font-size: clamp(42px, 5.2vw, 74px);
+      line-height: .92;
+    }
+    .brand h1 span{ display:block; }
+    .brand p{
+      margin:0;
+      font-size: 12.5px;
+      line-height: 1.7;
+      color: var(--muted);
+      max-width: 280px;
+    }
+    .chips{
+      display:flex; flex-wrap:wrap; gap:8px;
+      margin-top: 4px;
+    }
+    .chip{
+      font-size: 11px;
+      padding: 6px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(89,101,58,.30);
+      color: var(--olive-2);
+      background: rgba(255,255,255,.55);
+      backdrop-filter: blur(6px);
+    }
+
+    /* right nav – subtle */
+    .nav{
+      display:flex;
+      gap: 10px;
+      align-items:center;
+      margin-top: 6px;
+    }
+    .nav button{
+      appearance:none;
+      border:0;
+      background: transparent;
+      color: var(--muted);
+      font-size: 13px;
+      padding: 10px 12px;
+      border-radius: 999px;
+      cursor:pointer;
+      transition: .2s ease;
+      position:relative;
+    }
+    .nav button:hover{
+      color: var(--olive-2);
+      background: rgba(255,255,255,.55);
+    }
+    .nav button.active{
+      color: var(--olive-2);
+      background: rgba(89,101,58,.10);
+      border: 1px solid rgba(89,101,58,.25);
+    }
+
+    /* ===== Main stage (center arch + right small card) ===== */
+    .stage{
+      position:relative;
+      z-index: 2;
+      display:grid;
+      grid-template-columns: 1fr;
+      place-items:center;
+      padding: 10px 0 0;
+    }
+
+    .center{
+      width: min(760px, 100%);
+      position:relative;
+      display:grid;
+      place-items:center;
+      padding: 10px 0 22px;
+    }
+
+    /* outer arch frame like reference */
+    .arch-frame{
+      width: min(560px, 100%);
+      aspect-ratio: 4/5;
+      border-radius: 999px 999px 28px 28px;
+      border: 1px solid rgba(31,31,31,.22);
+      position:relative;
+      display:grid;
+      place-items:center;
+      overflow:hidden;
+      background:
+        radial-gradient(260px 260px at 30% 30%, rgba(89,101,58,.10), transparent 60%),
+        linear-gradient(180deg, rgba(0,0,0,.05), rgba(0,0,0,.02));
+    }
+    .arch-frame::before{
+      content:"";
+      position:absolute;
+      inset: 18px;
+      border-radius: 999px 999px 22px 22px;
+      border: 1px solid rgba(31,31,31,.15);
+      pointer-events:none;
+      z-index: 3;
+    }
+
+    /* Carousel images stack */
+    .slides{
+      position:absolute;
+      inset: 18px;
+      border-radius: 999px 999px 22px 22px;
+      overflow:hidden;
+      z-index: 1;
+    }
+    .slide{
+      position:absolute;
+      inset:0;
+      background-size: cover;
+      background-position:center;
+      filter: grayscale(1) contrast(1.05);
+      opacity:0;
+      transform: scale(1.02);
+      transition: opacity .65s ease, transform 1.6s ease;
+    }
+    .slide.active{
+      opacity:.94;
+      transform: scale(1.0);
+    }
+    .slide::after{
+      content:"";
+      position:absolute;
+      inset:0;
+      background: linear-gradient(180deg, rgba(255,255,255,.12), rgba(0,0,0,.06));
+      pointer-events:none;
+    }
+
+    /* little top mark like reference */
+    .mark{
+      position:absolute;
+      top: 16px;
+      left:50%;
+      transform: translateX(-50%);
+      z-index: 5;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      width: 62px;
+      height: 62px;
+      border-radius: 999px;
+      border: 1px solid rgba(89,101,58,.38);
+      color: var(--olive);
+      background: rgba(255,255,255,.45);
+      backdrop-filter: blur(6px);
+      font-family:"Playfair Display", serif;
+      font-weight:600;
+      letter-spacing:.04em;
+    }
+
+    /* floating sparkles like reference */
+    .spark{
+      position:absolute;
+      width: 11px;
+      height: 11px;
+      border-radius: 2px;
+      background: var(--olive);
+      opacity: .70;
+      transform: rotate(45deg);
+      z-index: 6;
+    }
+    .spark.s1{ top: 168px; right: 32px; }
+    .spark.s2{ top: 320px; left: 44px; opacity:.52; }
+    .spark.s3{ bottom: 160px; right: 110px; width:9px; height:9px; opacity:.45; }
+
+    /* dots bottom center like reference */
+    .dots{
+      display:flex;
+      gap: 10px;
+      justify-content:center;
+      margin-top: 18px;
+      user-select:none;
+    }
+    .dot{
+      width: 6px; height: 6px;
+      border-radius: 999px;
+      background: rgba(31,31,31,.28);
+      cursor:pointer;
+      transition:.2s ease;
+    }
+    .dot.active{
+      background: rgba(31,31,31,.62);
+      transform: scale(1.08);
+    }
+
+    /* right small arch card like reference */
+    .mini-card{
+      position:absolute;
+      right: 14px;
+      bottom: 66px;
+      width: 190px;
+      padding: 0;
+      border-radius: 999px 999px 18px 18px;
+      border: 1px solid rgba(31,31,31,.14);
+      background: rgba(255,255,255,.62);
+      backdrop-filter: blur(10px);
+      box-shadow: 0 18px 46px rgba(0,0,0,.14);
+      overflow:hidden;
+    }
+    .mini-card .top{
+      padding: 14px 14px 0;
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      gap:10px;
+    }
+    .mini-card .badge{
+      width: 44px; height: 44px;
+      border-radius: 999px;
+      border: 1px solid rgba(89,101,58,.30);
+      background: rgba(255,255,255,.55);
+      display:grid;
+      place-items:center;
+      color: var(--olive-2);
+      font-family:"Playfair Display", serif;
+      font-weight:600;
+    }
+    .mini-card .body{
+      padding: 8px 14px 16px;
+      text-align:center;
+    }
+    .mini-card h3{
+      margin: 6px 0 6px;
+      font-family:"Playfair Display", serif;
+      font-weight:600;
+      color: var(--olive-2);
+      font-size: 16px;
+      letter-spacing:.02em;
+    }
+    .mini-card p{
+      margin:0;
+      color: var(--muted);
+      font-size: 11.5px;
+      line-height: 1.55;
+    }
+    .mini-card .twig{
+      position:absolute;
+      right:-22px;
+      bottom:-14px;
+      width: 120px;
+      opacity:.95;
+      filter: drop-shadow(0 18px 24px rgba(0,0,0,.16));
+      transform: rotate(12deg);
+      pointer-events:none;
+    }
+
+    /* IG bubble label like reference */
+    .ig-bubble{
+      position:absolute;
+      left: 76px;
+      top: 320px;
+      z-index: 7;
+      display:flex;
+      align-items:center;
+      gap: 10px;
+      padding: 10px 12px;
+      border-radius: 999px;
+      border: 1px solid rgba(31,31,31,.12);
+      background: rgba(255,255,255,.62);
+      backdrop-filter: blur(10px);
+      box-shadow: 0 16px 40px rgba(0,0,0,.10);
+    }
+    .ig-avatar{
+      width: 28px; height: 28px;
+      border-radius: 999px;
+      border: 1px solid rgba(31,31,31,.14);
+      background:
+        url("https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=200&q=70") center/cover;
+      filter: grayscale(1) contrast(1.05);
+    }
+    .ig-handle{
+      font-size: 12px;
+      color: var(--ink);
+      display:flex;
+      align-items:center;
+      gap:8px;
+      line-height:1;
+    }
+    .ig-handle small{
+      color: var(--muted);
+      font-size: 11px;
+    }
+
+    /* content panel (pages) sits below / right like reference minimal */
+    .content{
+      width: min(980px, 100%);
+      margin-top: 10px;
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      align-items:start;
+    }
+    .card{
+      background: rgba(255,255,255,.55);
+      border: 1px solid rgba(31,31,31,.10);
+      border-radius: 16px;
+      box-shadow: 0 12px 34px rgba(0,0,0,.06);
+      backdrop-filter: blur(8px);
+      padding: 16px 16px;
+    }
+    .card h2{
+      margin:0 0 8px;
+      font-size: 14px;
+      letter-spacing: .06em;
+      color: var(--olive-2);
+      font-weight: 600;
+    }
+    .card p{
+      margin:0;
+      color: var(--muted);
+      font-size: 12.5px;
+      line-height: 1.75;
+    }
+
+    .page{ display:none; animation: fade .25s ease; }
+    .page.active{ display:block; }
+    @keyframes fade{ from{opacity:0; transform:translateY(4px)} to{opacity:1; transform:none} }
+
+    /* Works grid */
+    .works{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-top: 12px;
+    }
+    .work{
+      border-radius: 14px;
+      overflow:hidden;
+      border: 1px solid rgba(31,31,31,.10);
+      background: rgba(255,255,255,.58);
+      cursor:pointer;
+      transition: .2s ease;
+      position:relative;
+      min-height: 140px;
+    }
+    .work:hover{ transform: translateY(-2px); box-shadow: 0 18px 40px rgba(0,0,0,.10); }
+    .work .thumb{
+      position:absolute; inset:0;
+      background-size: cover;
+      background-position:center;
+      filter: grayscale(1) contrast(1.05);
+      opacity:.92;
+    }
+    .work .meta{
+      position:absolute;
+      left:10px; right:10px; bottom:10px;
+      padding: 10px 10px;
+      border-radius: 12px;
+      background: rgba(255,255,255,.65);
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(31,31,31,.10);
+    }
+    .work .meta b{
+      display:block;
+      font-size: 12.5px;
+      color: var(--olive-2);
+      margin-bottom: 2px;
+    }
+    .work .meta span{
+      display:block;
+      font-size: 11.5px;
+      color: var(--muted);
+      line-height:1.4;
+    }
+
+    /* Modal */
+    .modal{
+      position:fixed;
+      inset:0;
+      background: rgba(0,0,0,.45);
+      display:none;
+      place-items:center;
+      padding: 18px;
+      z-index: 50;
+    }
+    .modal.open{ display:grid; }
+    .modal-card{
+      width: min(980px, 100%);
+      border-radius: 18px;
+      overflow:hidden;
+      background: rgba(255,255,255,.85);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255,255,255,.25);
+      box-shadow: var(--shadow);
+      display:grid;
+      grid-template-columns: 1.2fr .8fr;
+      min-height: 520px;
+    }
+    .modal-img{
+      background-size: cover;
+      background-position:center;
+      filter: grayscale(1) contrast(1.05);
+    }
+    .modal-side{
+      padding: 18px;
+      display:flex;
+      flex-direction:column;
+      gap: 10px;
+    }
+    .modal-side h3{
+      margin:0;
+      font-family: "Playfair Display", serif;
+      color: var(--olive-2);
+      font-size: 26px;
+    }
+    .modal-side p{
+      margin:0;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.85;
+    }
+    .pill{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding: 8px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(89,101,58,.28);
+      background: rgba(89,101,58,.10);
+      color: var(--olive-2);
+      font-size: 12px;
+      width: fit-content;
+    }
+    .close{
+      margin-left:auto;
+      border: 1px solid rgba(31,31,31,.14);
+      background: rgba(255,255,255,.65);
+      padding: 10px 12px;
+      border-radius: 999px;
+      cursor:pointer;
+      font-size: 13px;
+    }
+
+    /* bottom line like reference */
+    .bottom{
+      margin-top:auto;
+      position:relative;
+      padding-top: 18px;
+      z-index: 2;
+    }
+    .bottom::before{
+      content:"";
+      position:absolute;
+      left:0; right:0; top:0;
+      height:1px;
+      background: linear-gradient(90deg, transparent, rgba(89,101,58,.55), transparent);
+      opacity:.9;
+    }
+    .bottom-row{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      font-family:"Playfair Display", serif;
+      letter-spacing:.16em;
+      color: rgba(89,101,58,.95);
+      font-size: 11px;
+      text-transform: lowercase;
+      padding: 10px 6px 0;
+    }
+
+    /* carousel controls (optional, subtle) */
+    .ctrls{
+      position:absolute;
+      left: 50%;
+      bottom: 92px;
+      transform: translateX(-50%);
+      display:flex;
+      gap: 10px;
+      z-index: 8;
+      user-select:none;
+    }
+    .ctrl{
+      border: 1px solid rgba(31,31,31,.12);
+      background: rgba(255,255,255,.55);
+      color: var(--ink);
+      padding: 8px 10px;
+      border-radius: 999px;
+      font-size: 12px;
+      cursor:pointer;
+      backdrop-filter: blur(10px);
+      transition:.2s ease;
+    }
+    .ctrl:hover{ transform: translateY(-1px); }
+
+    /* Responsive */
+    @media (max-width: 980px){
+      body{ cursor:auto; } /* 手機/觸控避免怪異 */
+      .content{ grid-template-columns: 1fr; }
+      .mini-card{ right: 10px; bottom: 50px; transform: scale(.95); transform-origin: bottom right; }
+      .ig-bubble{ left: 30px; top: 340px; }
+    }
+    @media (max-width: 560px){
+      .mini-card{ display:none; } /* 手機先隱藏小卡，畫面更乾淨 */
+      .ig-bubble{ left: 18px; top: 300px; transform: scale(.95); transform-origin:left center; }
+      .works{ grid-template-columns: 1fr; }
+      .ctrls{ display:none; }
+    }
+
+    /* hover detection for cursor */
+    a, button, .dot, .work { cursor:none; }
+
+  </style>
+</head>
+
+<body>
+  <!-- Custom cursor -->
+  <div class="cursor" id="cursor" aria-hidden="true"></div>
+
+  <main class="wrap">
+    <!-- Decorations -->
+    <div class="decor" aria-hidden="true">
+      <!-- 右上枝葉 -->
+      <svg class="branch tr" viewBox="0 0 520 260" xmlns="http://www.w3.org/2000/svg">
+        <g fill="none" stroke="rgba(31,31,31,.18)" stroke-width="2" stroke-linecap="round">
+          <path d="M80 220 C170 150, 240 110, 340 60 C400 30, 450 20, 500 10"/>
+          <path d="M220 140 C240 120, 260 110, 280 98"/>
+          <path d="M310 88 C330 72, 350 62, 372 54"/>
+          <path d="M160 170 C180 150, 205 140, 230 126"/>
+        </g>
+        <g>
+          <circle cx="220" cy="140" r="9" fill="rgba(89,101,58,.75)"/>
+          <circle cx="305" cy="90" r="8" fill="rgba(89,101,58,.65)"/>
+          <circle cx="160" cy="170" r="7" fill="rgba(89,101,58,.55)"/>
+          <circle cx="370" cy="55" r="7" fill="rgba(89,101,58,.55)"/>
+        </g>
+        <g fill="rgba(255,255,255,.72)" stroke="rgba(31,31,31,.14)" stroke-width="1">
+          <path d="M248 122c10-8 22-8 30 0c-6 14-12 20-15 22c-3-2-9-8-15-22z"/>
+          <path d="M332 70c9-7 20-7 28 0c-6 13-11 19-14 21c-3-2-8-8-14-21z"/>
+          <path d="M182 152c8-6 17-6 24 0c-5 11-9 16-12 18c-3-2-7-7-12-18z"/>
+        </g>
+      </svg>
+
+      <!-- 左下枝葉 -->
+      <svg class="branch bl" viewBox="0 0 520 320" xmlns="http://www.w3.org/2000/svg">
+        <g fill="none" stroke="rgba(31,31,31,.18)" stroke-width="2" stroke-linecap="round">
+          <path d="M40 300 C120 240, 160 210, 220 150 C280 90, 340 70, 500 20"/>
+          <path d="M170 210 C190 192, 206 184, 225 170"/>
+          <path d="M260 140 C282 122, 300 114, 320 104"/>
+          <path d="M110 255 C130 235, 148 225, 170 210"/>
+        </g>
+        <g>
+          <circle cx="170" cy="210" r="9" fill="rgba(89,101,58,.75)"/>
+          <circle cx="260" cy="140" r="8" fill="rgba(89,101,58,.65)"/>
+          <circle cx="110" cy="255" r="7" fill="rgba(89,101,58,.55)"/>
+        </g>
+        <g fill="rgba(255,255,255,.72)" stroke="rgba(31,31,31,.14)" stroke-width="1">
+          <path d="M198 188c10-8 22-8 30 0c-6 14-12 20-15 22c-3-2-9-8-15-22z"/>
+          <path d="M290 118c9-7 20-7 28 0c-6 13-11 19-14 21c-3-2-8-8-14-21z"/>
+          <path d="M132 235c8-6 17-6 24 0c-5 11-9 16-12 18c-3-2-7-7-12-18z"/>
+        </g>
+      </svg>
+
+      <div class="leaf-float l1"></div>
+      <div class="leaf-float l2"></div>
+      <div class="leaf-float l3"></div>
+    </div>
+
+    <header class="top">
+      <div class="brand">
+        <h1><span>Eté</span><span>reo</span></h1>
+        <p>
+          以光影與情緒為核心的攝影作品集。捕捉日常的詩意、細節的溫度，以及人物之間的靜謐張力。
+        </p>
+        <div class="chips" aria-label="style tags">
+          <span class="chip">Portrait</span>
+          <span class="chip">Editorial</span>
+          <span class="chip">Film mood</span>
+          <span class="chip">Minimal</span>
+        </div>
+      </div>
+
+      <nav class="nav" aria-label="pages">
+        <button class="active" data-tab="about">攝影師介紹</button>
+        <button data-tab="works">作品區</button>
+      </nav>
+    </header>
+
+    <section class="stage">
+      <div class="center">
+        <div class="arch-frame" aria-label="hero arch carousel">
+          <div class="slides" id="slides"></div>
+
+          <div class="mark">M</div>
+
+          <div class="spark s1"></div>
+          <div class="spark s2"></div>
+          <div class="spark s3"></div>
+
+          <!-- IG bubble -->
+          <div class="ig-bubble">
+            <div class="ig-avatar" aria-hidden="true"></div>
+            <div class="ig-handle">
+              <span>artvelaut</span>
+              <small>•</small>
+              <small>by Muse</small>
+            </div>
+          </div>
+
+          <!-- mini card -->
+          <div class="mini-card" aria-label="mini info card">
+            <div class="top">
+              <div class="badge">M</div>
+            </div>
+            <div class="body">
+              <h3>by Muse</h3>
+              <p>Portrait / Editorial<br/>自然光與留白的情緒</p>
+            </div>
+            <svg class="twig" viewBox="0 0 160 120" xmlns="http://www.w3.org/2000/svg">
+              <g fill="none" stroke="rgba(31,31,31,.18)" stroke-width="2" stroke-linecap="round">
+                <path d="M10 110 C50 80, 70 70, 110 40 C130 26, 145 18, 156 10"/>
+                <path d="M66 68 C76 60, 86 56, 94 50"/>
+              </g>
+              <g>
+                <circle cx="66" cy="68" r="7" fill="rgba(89,101,58,.70)"/>
+                <circle cx="110" cy="40" r="6" fill="rgba(89,101,58,.55)"/>
+              </g>
+              <g fill="rgba(255,255,255,.72)" stroke="rgba(31,31,31,.14)" stroke-width="1">
+                <path d="M78 56c8-6 18-6 24 0c-5 11-9 16-12 18c-3-2-7-7-12-18z"/>
+              </g>
+            </svg>
+          </div>
+        </div>
+
+        <!-- optional controls -->
+        <div class="ctrls">
+          <button class="ctrl" id="prevBtn">上一張</button>
+          <button class="ctrl" id="nextBtn">下一張</button>
+        </div>
+
+        <div class="dots" id="dots" aria-label="carousel dots"></div>
+      </div>
+
+      <!-- Content pages -->
+      <div class="content">
+        <div class="page active" id="page-about">
+          <div class="card">
+            <h2>About / 攝影師介紹</h2>
+            <p>
+              嗨，我是 <b style="color:var(--olive-2)">Muse</b>。擅長以乾淨構圖與柔和對比，
+              捕捉人物最自然的情緒與輪廓。作品風格介於 <b>極簡</b> 與 <b>詩意</b> 之間，
+              常用自然光、留白與低飽和調性，讓畫面更耐看。
+            </p>
+          </div>
+
+          <div class="card">
+            <h2>服務項目</h2>
+            <p>
+              ・人像寫真 / 情侶 / 家庭<br/>
+              ・品牌形象 / 產品與場景<br/>
+              ・活動紀錄 / 後台花絮<br/>
+              ・修圖：自然膚質、色調統一、去除干擾物
+            </p>
+          </div>
+        </div>
+
+        <div class="page" id="page-works">
+          <div class="card">
+            <h2>Works / 作品區</h2>
+            <p>
+              每組作品都包含 <b style="color:var(--olive-2)">作品簡介</b> 與
+              <b style="color:var(--olive-2)">拍攝說明</b>。點擊卡片可查看完整描述與大圖。
+            </p>
+
+            <div class="works" id="worksGrid"></div>
+          </div>
+
+          <div class="card">
+            <h2>作品說明範例（可替換成你的內容）</h2>
+            <p>
+              ・概念：以「留白」呈現距離感與安靜情緒<br/>
+              ・光線：窗邊自然光 + 反光板，降低陰影硬度<br/>
+              ・色調：低飽和、偏冷灰、保留肌膚質感<br/>
+              ・構圖：拱門/框景強化主體聚焦，背景元素減法
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <footer class="bottom" aria-label="footer">
+      <div class="bottom-row">
+        <span>autumn</span>
+        <span>friday</span>
+        <span>march</span>
+      </div>
+    </footer>
+  </main>
+
+  <!-- Modal -->
+  <div class="modal" id="modal" aria-hidden="true">
+    <div class="modal-card" role="dialog" aria-modal="true" aria-label="work detail">
+      <div class="modal-img" id="modalImg"></div>
+      <div class="modal-side">
+        <button class="close" id="closeModal">關閉</button>
+        <h3 id="modalTitle">Title</h3>
+        <div class="pill" id="modalTag">Tag</div>
+        <p id="modalDesc"></p>
+        <p id="modalNote"></p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // ===== Touch device detection: disable custom cursor =====
+    const isTouch = window.matchMedia("(pointer: coarse)").matches;
+    const cursor = document.getElementById("cursor");
+    if (isTouch) {
+      document.body.style.cursor = "auto";
+      cursor.classList.add("hidden");
+    }
+
+    // ===== Custom cursor follow (dot+ring) =====
+    if (!isTouch) {
+      let x = window.innerWidth / 2, y = window.innerHeight / 2;
+      let tx = x, ty = y;
+
+      window.addEventListener("mousemove", (e) => {
+        tx = e.clientX;
+        ty = e.clientY;
+        cursor.classList.remove("hidden");
+      });
+
+      // smooth follow
+      function raf() {
+        x += (tx - x) * 0.18;
+        y += (ty - y) * 0.18;
+        cursor.style.left = x + "px";
+        cursor.style.top = y + "px";
+        requestAnimationFrame(raf);
+      }
+      raf();
+
+      // hover enlarge on interactive elements
+      const hoverables = "a,button,.dot,.work";
+      document.addEventListener("mouseover", (e) => {
+        if (e.target.closest(hoverables)) cursor.classList.add("hover");
+      });
+      document.addEventListener("mouseout", (e) => {
+        if (e.target.closest(hoverables)) cursor.classList.remove("hover");
+      });
+
+      // hide when leave window
+      window.addEventListener("mouseleave", () => cursor.classList.add("hidden"));
+      window.addEventListener("mouseenter", () => cursor.classList.remove("hidden"));
+    }
+
+    // ===== Tabs =====
+    const tabBtns = document.querySelectorAll('.nav button[data-tab]');
+    const pageAbout = document.getElementById('page-about');
+    const pageWorks = document.getElementById('page-works');
+    function setTab(name){
+      tabBtns.forEach(b => b.classList.toggle('active', b.dataset.tab === name));
+      pageAbout.classList.toggle('active', name === 'about');
+      pageWorks.classList.toggle('active', name === 'works');
+    }
+    tabBtns.forEach(btn => btn.addEventListener('click', () => setTab(btn.dataset.tab)));
+
+    // ===== Carousel =====
+    const images = [
+      "https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?auto=format&fit=crop&w=1400&q=70",
+      "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=1400&q=70",
+      "https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=1400&q=70"
+    ];
+
+    const slidesEl = document.getElementById("slides");
+    const dotsEl = document.getElementById("dots");
+
+    let current = 0;
+    let timer = null;
+    const intervalMs = 4200;
+
+    function renderSlides(){
+      slidesEl.innerHTML = images.map((src, i) => `
+        <div class="slide ${i===0 ? 'active':''}" data-i="${i}" style="background-image:url('${src}')"></div>
+      `).join("");
+
+      dotsEl.innerHTML = images.map((_, i) => `
+        <span class="dot ${i===0 ? 'active':''}" data-i="${i}" aria-label="go to slide ${i+1}"></span>
+      `).join("");
+    }
+
+    function setSlide(i){
+      const slides = slidesEl.querySelectorAll(".slide");
+      const dots = dotsEl.querySelectorAll(".dot");
+      if(!slides.length) return;
+
+      current = (i + slides.length) % slides.length;
+
+      slides.forEach(s => s.classList.toggle("active", Number(s.dataset.i) === current));
+      dots.forEach(d => d.classList.toggle("active", Number(d.dataset.i) === current));
+    }
+
+    function next(){ setSlide(current + 1); }
+    function prev(){ setSlide(current - 1); }
+
+    function startAuto(){
+      stopAuto();
+      timer = setInterval(next, intervalMs);
+    }
+    function stopAuto(){
+      if(timer) clearInterval(timer);
+      timer = null;
+    }
+
+    renderSlides();
+    startAuto();
+
+    dotsEl.addEventListener("click", (e) => {
+      const d = e.target.closest(".dot");
+      if(!d) return;
+      setSlide(Number(d.dataset.i));
+      startAuto();
+    });
+
+    // pause on hover (desktop)
+    slidesEl.addEventListener("mouseenter", () => stopAuto());
+    slidesEl.addEventListener("mouseleave", () => startAuto());
+
+    document.getElementById("nextBtn").addEventListener("click", () => { next(); startAuto(); });
+    document.getElementById("prevBtn").addEventListener("click", () => { prev(); startAuto(); });
+
+    // ===== Works data + modal =====
+    const works = [
+      {
+        title: "Quiet Bloom",
+        tag: "Portrait / Natural light",
+        img: "https://images.unsplash.com/photo-1520975682031-ae0f4d1b9f61?auto=format&fit=crop&w=1600&q=70",
+        desc: "以安靜的留白與框景（拱門）讓視線集中在人物的呼吸感，畫面保留光線流動與皮膚質地。",
+        note: "拍攝說明：窗邊自然光＋柔化陰影；構圖採中近景，背景元素減法；色調偏冷灰低飽和。"
+      },
+      {
+        title: "Editorial Drift",
+        tag: "Editorial / Minimal",
+        img: "https://images.unsplash.com/photo-1520974735194-6d2b9f1b4f4c?auto=format&fit=crop&w=1600&q=70",
+        desc: "帶一點雜誌感的冷靜情緒，讓服裝線條與眼神成為主角。",
+        note: "拍攝說明：硬光轉柔光、提高對比；採用偏置構圖；後製保留顆粒與黑白層次。"
+      },
+      {
+        title: "Soft Shadow",
+        tag: "Portrait / Mood",
+        img: "https://images.unsplash.com/photo-1524502397800-2eeaad7c3fe5?auto=format&fit=crop&w=1600&q=70",
+        desc: "用陰影講故事，讓情緒停留在眼睛與輪廓。",
+        note: "拍攝說明：側光＋反光板微補；低飽和；局部銳利、背景降噪與降對比。"
+      },
+      {
+        title: "Still Morning",
+        tag: "Lifestyle / Film mood",
+        img: "https://images.unsplash.com/photo-1524503033411-f9f4a2b7f3b6?auto=format&fit=crop&w=1600&q=70",
+        desc: "日常片段像電影定格，乾淨的光與空氣感是主角。",
+        note: "拍攝說明：早晨散射光；色調偏暖灰；使用留白與水平線穩定畫面。"
+      }
+    ];
+
+    const grid = document.getElementById('worksGrid');
+    grid.innerHTML = works.map((w, idx) => `
+      <div class="work" data-idx="${idx}" aria-label="${w.title}">
+        <div class="thumb" style="background-image:url('${w.img}')"></div>
+        <div class="meta">
+          <b>${w.title}</b>
+          <span>${w.tag}</span>
+        </div>
+      </div>
+    `).join('');
+
+    const modal = document.getElementById('modal');
+    const modalImg = document.getElementById('modalImg');
+    const modalTitle = document.getElementById('modalTitle');
+    const modalTag = document.getElementById('modalTag');
+    const modalDesc = document.getElementById('modalDesc');
+    const modalNote = document.getElementById('modalNote');
+
+    function openModal(w){
+      modal.classList.add('open');
+      modal.setAttribute('aria-hidden','false');
+      modalImg.style.backgroundImage = `url("${w.img}")`;
+      modalTitle.textContent = w.title;
+      modalTag.textContent = w.tag;
+      modalDesc.textContent = "作品簡介：" + w.desc;
+      modalNote.textContent = w.note;
+      stopAuto();
+    }
+    function closeModal(){
+      modal.classList.remove('open');
+      modal.setAttribute('aria-hidden','true');
+      startAuto();
+    }
+
+    grid.addEventListener('click', (e) => {
+      const card = e.target.closest('.work');
+      if(!card) return;
+      openModal(works[Number(card.dataset.idx)]);
+    });
+
+    document.getElementById('closeModal').addEventListener('click', closeModal);
+    modal.addEventListener('click', (e) => { if(e.target === modal) closeModal(); });
+    window.addEventListener('keydown', (e) => { if(e.key === 'Escape' && modal.classList.contains('open')) closeModal(); });
+
+  </script>
+</body>
+</html>
