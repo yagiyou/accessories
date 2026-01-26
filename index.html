@@ -34,7 +34,7 @@
         radial-gradient(900px 520px at 10% 92%, rgba(89,101,58,.06), transparent 62%),
         linear-gradient(180deg, var(--paper), #fff 55%, #f3f3ef);
       overflow-x:hidden;
-      cursor:none; /* 交給 custom cursor */
+      cursor:none; /* custom cursor */
     }
 
     /* ===== Custom Cursor ===== */
@@ -48,7 +48,7 @@
       transform: translate(-50%, -50%);
       z-index: 9999;
       mix-blend-mode: multiply;
-      transition: width .18s ease, height .18s ease, border-color .18s ease, background .18s ease;
+      transition: width .18s ease, height .18s ease, border-color .18s ease, background .18s ease, opacity .2s ease;
       background: rgba(255,255,255,.0);
       backdrop-filter: blur(0px);
     }
@@ -75,68 +75,68 @@
       margin:0 auto;
       padding: 42px 22px 28px;
       position:relative;
+      z-index:1; /* ensure above decorations */
       min-height:100vh;
       display:flex;
       flex-direction:column;
       gap: 22px;
     }
 
-    /* corner decorations like reference */
-   <div class="decor" aria-hidden="true">
-  <!-- 右上櫻花（你自己去背的圖） -->
-  <img class="sakura sakura-tr" src="YOUR_SAKURA_TOP_RIGHT.png" alt="" />
+    /* ===== Decorations container ===== */
+    .decor{
+      position:absolute;
+      inset:0;
+      pointer-events:none;
+      z-index:0;
+    }
 
-  <!-- 左下櫻花（你自己去背的圖） -->
-  <img class="sakura sakura-bl" src="YOUR_SAKURA_BOTTOM_LEFT.png" alt="" />
+    /* ===== Sakura cutout images ===== */
+    .sakura{
+      position:absolute;
+      pointer-events:none;
+      user-select:none;
+      z-index:0;
+      width: min(520px, 46vw);
+      height:auto;
+      filter:
+        drop-shadow(0 26px 38px rgba(0,0,0,.18))
+        drop-shadow(0 8px 14px rgba(0,0,0,.10));
+      opacity:.95;
+    }
+    .sakura-tr{
+      top:-18px;
+      right:-20px;
+      transform: rotate(2deg);
+    }
+    .sakura-bl{
+      bottom:44px;
+      left:-36px;
+      width: min(440px, 42vw);
+      transform: rotate(-9deg);
+      opacity:.92;
+    }
+    @media (max-width: 560px){
+      .sakura-tr{ width: min(360px, 70vw); right: -40px; top: -28px; }
+      .sakura-bl{ width: min(320px, 70vw); left: -50px; bottom: 70px; }
+    }
 
-  <!-- 你要的漂浮小葉片可以留著，或刪掉也行 -->
-  <div class="leaf-float l1"></div>
-  <div class="leaf-float l2"></div>
-  <div class="leaf-float l3"></div>
-</div>
+    /* floating leaves (optional) */
+    .leaf-float{
+      position:absolute;
+      width: 44px; height: 44px;
+      border-radius: 60% 40% 55% 45% / 55% 45% 55% 45%;
+      background:
+        radial-gradient(circle at 30% 30%, rgba(255,255,255,.35), transparent 55%),
+        radial-gradient(circle at 70% 70%, rgba(0,0,0,.12), transparent 60%),
+        linear-gradient(135deg, rgba(89,101,58,.95), rgba(89,101,58,.48));
+      opacity:.85;
+      box-shadow: 0 18px 44px rgba(0,0,0,.18);
+    }
+    .leaf-float.l1{ top: 160px; left: 50.5%; transform: translateX(-50%) rotate(-16deg) scale(.75); }
+    .leaf-float.l2{ top: 230px; right: 220px; transform: rotate(18deg) scale(.65); opacity:.55; }
+    .leaf-float.l3{ bottom: 210px; right: 90px; transform: rotate(-20deg) scale(.6); opacity:.45; }
 
-/* ===== Sakura (your cutout PNG/WebP) ===== */
-.sakura{
-  position:absolute;
-  pointer-events:none;
-  user-select:none;
-  z-index: 0; /* 在內容後面 */
-  width: min(520px, 46vw);
-  height: auto;
-
-  /* 讓去背圖更像「放在紙上」的真實感 */
-  filter:
-    drop-shadow(0 26px 38px rgba(0,0,0,.18))
-    drop-shadow(0 8px 14px rgba(0,0,0,.10));
-  opacity: .95;
-
-  /* 顏色若太鮮，略壓一下 */
-  /* mix-blend-mode: multiply;  ← 視你的圖決定要不要開 */
-}
-
-/* 右上：自然超出畫面一點 */
-.sakura-tr{
-  top: -18px;
-  right: -20px;
-  transform: rotate(2deg);
-}
-
-/* 左下：壓在底部細線之上更像拼貼 */
-.sakura-bl{
-  bottom: 44px;
-  left: -36px;
-  width: min(440px, 42vw);
-  transform: rotate(-9deg);
-  opacity: .92;
-}
-
-/* RWD：手機別太滿 */
-@media (max-width: 560px){
-  .sakura-tr{ width: min(360px, 70vw); right: -40px; top: -28px; }
-  .sakura-bl{ width: min(320px, 70vw); left: -50px; bottom: 70px; }
-}
-
-    /* top spacing layer */
+    /* ===== Top ===== */
     .top{
       display:flex;
       justify-content:space-between;
@@ -146,7 +146,6 @@
       z-index: 2;
     }
 
-    /* left title like reference */
     .brand{
       display:flex;
       flex-direction:column;
@@ -184,12 +183,13 @@
       backdrop-filter: blur(6px);
     }
 
-    /* right nav – subtle */
     .nav{
       display:flex;
       gap: 10px;
       align-items:center;
       margin-top: 6px;
+      position:relative;
+      z-index:2;
     }
     .nav button{
       appearance:none;
@@ -213,7 +213,7 @@
       border: 1px solid rgba(89,101,58,.25);
     }
 
-    /* ===== Main stage (center arch + right small card) ===== */
+    /* ===== Main stage ===== */
     .stage{
       position:relative;
       z-index: 2;
@@ -231,7 +231,6 @@
       padding: 10px 0 22px;
     }
 
-    /* outer arch frame like reference */
     .arch-frame{
       width: min(560px, 100%);
       aspect-ratio: 4/5;
@@ -255,7 +254,6 @@
       z-index: 3;
     }
 
-    /* Carousel images stack */
     .slides{
       position:absolute;
       inset: 18px;
@@ -285,7 +283,6 @@
       pointer-events:none;
     }
 
-    /* little top mark like reference */
     .mark{
       position:absolute;
       top: 16px;
@@ -307,7 +304,6 @@
       letter-spacing:.04em;
     }
 
-    /* floating sparkles like reference */
     .spark{
       position:absolute;
       width: 11px;
@@ -322,7 +318,6 @@
     .spark.s2{ top: 320px; left: 44px; opacity:.52; }
     .spark.s3{ bottom: 160px; right: 110px; width:9px; height:9px; opacity:.45; }
 
-    /* dots bottom center like reference */
     .dots{
       display:flex;
       gap: 10px;
@@ -342,7 +337,6 @@
       transform: scale(1.08);
     }
 
-    /* right small arch card like reference */
     .mini-card{
       position:absolute;
       right: 14px;
@@ -355,6 +349,7 @@
       backdrop-filter: blur(10px);
       box-shadow: 0 18px 46px rgba(0,0,0,.14);
       overflow:hidden;
+      z-index: 7;
     }
     .mini-card .top{
       padding: 14px 14px 0;
@@ -403,7 +398,6 @@
       pointer-events:none;
     }
 
-    /* IG bubble label like reference */
     .ig-bubble{
       position:absolute;
       left: 76px;
@@ -440,7 +434,6 @@
       font-size: 11px;
     }
 
-    /* content panel (pages) sits below / right like reference minimal */
     .content{
       width: min(980px, 100%);
       margin-top: 10px;
@@ -448,6 +441,8 @@
       grid-template-columns: 1fr 1fr;
       gap: 16px;
       align-items:start;
+      position:relative;
+      z-index:2;
     }
     .card{
       background: rgba(255,255,255,.55);
@@ -475,7 +470,6 @@
     .page.active{ display:block; }
     @keyframes fade{ from{opacity:0; transform:translateY(4px)} to{opacity:1; transform:none} }
 
-    /* Works grid */
     .works{
       display:grid;
       grid-template-columns: 1fr 1fr;
@@ -522,7 +516,6 @@
       line-height:1.4;
     }
 
-    /* Modal */
     .modal{
       position:fixed;
       inset:0;
@@ -590,7 +583,6 @@
       font-size: 13px;
     }
 
-    /* bottom line like reference */
     .bottom{
       margin-top:auto;
       position:relative;
@@ -617,7 +609,6 @@
       padding: 10px 6px 0;
     }
 
-    /* carousel controls (optional, subtle) */
     .ctrls{
       position:absolute;
       left: 50%;
@@ -641,74 +632,33 @@
     }
     .ctrl:hover{ transform: translateY(-1px); }
 
-    /* Responsive */
     @media (max-width: 980px){
-      body{ cursor:auto; } /* 手機/觸控避免怪異 */
+      body{ cursor:auto; }
       .content{ grid-template-columns: 1fr; }
       .mini-card{ right: 10px; bottom: 50px; transform: scale(.95); transform-origin: bottom right; }
       .ig-bubble{ left: 30px; top: 340px; }
     }
     @media (max-width: 560px){
-      .mini-card{ display:none; } /* 手機先隱藏小卡，畫面更乾淨 */
+      .mini-card{ display:none; }
       .ig-bubble{ left: 18px; top: 300px; transform: scale(.95); transform-origin:left center; }
       .works{ grid-template-columns: 1fr; }
       .ctrls{ display:none; }
     }
 
-    /* hover detection for cursor */
     a, button, .dot, .work { cursor:none; }
-
   </style>
 </head>
 
 <body>
-  <!-- Custom cursor -->
   <div class="cursor" id="cursor" aria-hidden="true"></div>
 
   <main class="wrap">
-    <!-- Decorations -->
+    <!-- Decorations：櫻花去背圖放這裡 -->
     <div class="decor" aria-hidden="true">
-      <!-- 右上枝葉 -->
-      <svg class="branch tr" viewBox="0 0 520 260" xmlns="http://www.w3.org/2000/svg">
-        <g fill="none" stroke="rgba(31,31,31,.18)" stroke-width="2" stroke-linecap="round">
-          <path d="M80 220 C170 150, 240 110, 340 60 C400 30, 450 20, 500 10"/>
-          <path d="M220 140 C240 120, 260 110, 280 98"/>
-          <path d="M310 88 C330 72, 350 62, 372 54"/>
-          <path d="M160 170 C180 150, 205 140, 230 126"/>
-        </g>
-        <g>
-          <circle cx="220" cy="140" r="9" fill="rgba(89,101,58,.75)"/>
-          <circle cx="305" cy="90" r="8" fill="rgba(89,101,58,.65)"/>
-          <circle cx="160" cy="170" r="7" fill="rgba(89,101,58,.55)"/>
-          <circle cx="370" cy="55" r="7" fill="rgba(89,101,58,.55)"/>
-        </g>
-        <g fill="rgba(255,255,255,.72)" stroke="rgba(31,31,31,.14)" stroke-width="1">
-          <path d="M248 122c10-8 22-8 30 0c-6 14-12 20-15 22c-3-2-9-8-15-22z"/>
-          <path d="M332 70c9-7 20-7 28 0c-6 13-11 19-14 21c-3-2-8-8-14-21z"/>
-          <path d="M182 152c8-6 17-6 24 0c-5 11-9 16-12 18c-3-2-7-7-12-18z"/>
-        </g>
-      </svg>
+      <img class="sakura sakura-tr" src="images/sakura-tr.png" alt="">
+      <img class="sakura sakura-bl" src="images/sakura-bl.png" alt="">
 
-      <!-- 左下枝葉 -->
-      <svg class="branch bl" viewBox="0 0 520 320" xmlns="http://www.w3.org/2000/svg">
-        <g fill="none" stroke="rgba(31,31,31,.18)" stroke-width="2" stroke-linecap="round">
-          <path d="M40 300 C120 240, 160 210, 220 150 C280 90, 340 70, 500 20"/>
-          <path d="M170 210 C190 192, 206 184, 225 170"/>
-          <path d="M260 140 C282 122, 300 114, 320 104"/>
-          <path d="M110 255 C130 235, 148 225, 170 210"/>
-        </g>
-        <g>
-          <circle cx="170" cy="210" r="9" fill="rgba(89,101,58,.75)"/>
-          <circle cx="260" cy="140" r="8" fill="rgba(89,101,58,.65)"/>
-          <circle cx="110" cy="255" r="7" fill="rgba(89,101,58,.55)"/>
-        </g>
-        <g fill="rgba(255,255,255,.72)" stroke="rgba(31,31,31,.14)" stroke-width="1">
-          <path d="M198 188c10-8 22-8 30 0c-6 14-12 20-15 22c-3-2-9-8-15-22z"/>
-          <path d="M290 118c9-7 20-7 28 0c-6 13-11 19-14 21c-3-2-8-8-14-21z"/>
-          <path d="M132 235c8-6 17-6 24 0c-5 11-9 16-12 18c-3-2-7-7-12-18z"/>
-        </g>
-      </svg>
-
+      <!-- optional floating leaves -->
       <div class="leaf-float l1"></div>
       <div class="leaf-float l2"></div>
       <div class="leaf-float l3"></div>
@@ -717,9 +667,7 @@
     <header class="top">
       <div class="brand">
         <h1><span>Eté</span><span>reo</span></h1>
-        <p>
-          以光影與情緒為核心的攝影作品集。捕捉日常的詩意、細節的溫度，以及人物之間的靜謐張力。
-        </p>
+        <p>以光影與情緒為核心的攝影作品集。捕捉日常的詩意、細節的溫度，以及人物之間的靜謐張力。</p>
         <div class="chips" aria-label="style tags">
           <span class="chip">Portrait</span>
           <span class="chip">Editorial</span>
@@ -745,7 +693,6 @@
           <div class="spark s2"></div>
           <div class="spark s3"></div>
 
-          <!-- IG bubble -->
           <div class="ig-bubble">
             <div class="ig-avatar" aria-hidden="true"></div>
             <div class="ig-handle">
@@ -755,11 +702,8 @@
             </div>
           </div>
 
-          <!-- mini card -->
           <div class="mini-card" aria-label="mini info card">
-            <div class="top">
-              <div class="badge">M</div>
-            </div>
+            <div class="top"><div class="badge">M</div></div>
             <div class="body">
               <h3>by Muse</h3>
               <p>Portrait / Editorial<br/>自然光與留白的情緒</p>
@@ -780,7 +724,6 @@
           </div>
         </div>
 
-        <!-- optional controls -->
         <div class="ctrls">
           <button class="ctrl" id="prevBtn">上一張</button>
           <button class="ctrl" id="nextBtn">下一張</button>
@@ -789,7 +732,6 @@
         <div class="dots" id="dots" aria-label="carousel dots"></div>
       </div>
 
-      <!-- Content pages -->
       <div class="content">
         <div class="page active" id="page-about">
           <div class="card">
@@ -819,7 +761,6 @@
               每組作品都包含 <b style="color:var(--olive-2)">作品簡介</b> 與
               <b style="color:var(--olive-2)">拍攝說明</b>。點擊卡片可查看完整描述與大圖。
             </p>
-
             <div class="works" id="worksGrid"></div>
           </div>
 
@@ -836,7 +777,7 @@
       </div>
     </section>
 
-    <footer class="bottom" aria-label="footer">
+    <footer class="bottom">
       <div class="bottom-row">
         <span>autumn</span>
         <span>friday</span>
@@ -845,7 +786,6 @@
     </footer>
   </main>
 
-  <!-- Modal -->
   <div class="modal" id="modal" aria-hidden="true">
     <div class="modal-card" role="dialog" aria-modal="true" aria-label="work detail">
       <div class="modal-img" id="modalImg"></div>
@@ -879,7 +819,6 @@
         cursor.classList.remove("hidden");
       });
 
-      // smooth follow
       function raf() {
         x += (tx - x) * 0.18;
         y += (ty - y) * 0.18;
@@ -889,7 +828,6 @@
       }
       raf();
 
-      // hover enlarge on interactive elements
       const hoverables = "a,button,.dot,.work";
       document.addEventListener("mouseover", (e) => {
         if (e.target.closest(hoverables)) cursor.classList.add("hover");
@@ -898,7 +836,6 @@
         if (e.target.closest(hoverables)) cursor.classList.remove("hover");
       });
 
-      // hide when leave window
       window.addEventListener("mouseleave", () => cursor.classList.add("hidden"));
       window.addEventListener("mouseenter", () => cursor.classList.remove("hidden"));
     }
@@ -923,7 +860,6 @@
 
     const slidesEl = document.getElementById("slides");
     const dotsEl = document.getElementById("dots");
-
     let current = 0;
     let timer = null;
     const intervalMs = 4200;
@@ -944,7 +880,6 @@
       if(!slides.length) return;
 
       current = (i + slides.length) % slides.length;
-
       slides.forEach(s => s.classList.toggle("active", Number(s.dataset.i) === current));
       dots.forEach(d => d.classList.toggle("active", Number(d.dataset.i) === current));
     }
@@ -971,7 +906,6 @@
       startAuto();
     });
 
-    // pause on hover (desktop)
     slidesEl.addEventListener("mouseenter", () => stopAuto());
     slidesEl.addEventListener("mouseleave", () => startAuto());
 
@@ -1052,9 +986,9 @@
 
     document.getElementById('closeModal').addEventListener('click', closeModal);
     modal.addEventListener('click', (e) => { if(e.target === modal) closeModal(); });
-    window.addEventListener('keydown', (e) => { if(e.key === 'Escape' && modal.classList.contains('open')) closeModal(); });
-
+    window.addEventListener('keydown', (e) => {
+      if(e.key === 'Escape' && modal.classList.contains('open')) closeModal();
+    });
   </script>
 </body>
-
 </html>
