@@ -109,11 +109,8 @@
         drop-shadow(0 8px 14px rgba(0,0,0,.08));
       opacity:.92;
     }
-    .sakura-tr{
-      top:-28px;
-      right:-38px;
-      transform: rotate(2deg);
-    }
+
+    /* 左下櫻花（仍在背景） */
     .sakura-bl{
       bottom:20px;
       left:-56px;
@@ -121,12 +118,8 @@
       transform: rotate(-9deg);
       opacity:.90;
     }
-    @media (max-width: 560px){
-      .sakura-tr{ width: min(360px, 70vw); right: -40px; top: -28px; }
-      .sakura-bl{ width: min(320px, 70vw); left: -50px; bottom: 70px; }
-    }
 
-    /* floating leaves：桌機容易亂，改成很輕微的金粉點 */
+    /* 手作金粉點 */
     .leaf-float{
       position:absolute;
       width: 10px; height: 10px;
@@ -140,6 +133,11 @@
     .leaf-float.l1{ top: 150px; left: 50.5%; transform: translateX(-50%); opacity:.60; }
     .leaf-float.l2{ top: 230px; right: 240px; opacity:.45; }
     .leaf-float.l3{ bottom: 210px; right: 120px; opacity:.35; }
+
+    @media (max-width: 560px){
+      .sakura-bl{ width: min(320px, 70vw); left: -50px; bottom: 70px; }
+      .leaf-float{ display:none; }
+    }
 
     /* ===== Top ===== */
     .top{
@@ -273,7 +271,7 @@
       inset:0;
       background-size: cover;
       background-position:center;
-      filter: var(--img); /* ✅ 彩色 */
+      filter: var(--img);
       opacity:0;
       transform: scale(1.03);
       transition: opacity .65s ease, transform 1.6s ease;
@@ -394,54 +392,33 @@
       font-size: 11.8px;
       line-height: 1.55;
     }
-    .mini-card .twig{
+
+    /* ===== ✅ 右上櫻花疊在輪播圖上（只壓在拱門上方） ===== */
+    .sakura-overlay{
       position:absolute;
-      right:-22px;
-      bottom:-14px;
-      width: 120px;
-      opacity:.95;
-      filter: drop-shadow(0 18px 24px rgba(0,0,0,.14));
-      transform: rotate(12deg);
+      top: -36px;
+      right: -44px;
+      width: min(360px, 42vw);
+      height:auto;
       pointer-events:none;
+      user-select:none;
+      z-index: 9; /* 高於拱門內容 */
+      transform: rotate(2deg);
+      opacity: .92;
+      filter:
+        drop-shadow(0 26px 38px rgba(0,0,0,.16))
+        drop-shadow(0 8px 14px rgba(0,0,0,.08));
+    }
+    @media (max-width: 560px){
+      .sakura-overlay{
+        width: min(260px, 70vw);
+        top: -28px;
+        right: -56px;
+        opacity: .88;
+      }
     }
 
-    .ig-bubble{
-      position:absolute;
-      left: 76px;
-      top: 320px;
-      z-index: 7;
-      display:flex;
-      align-items:center;
-      gap: 10px;
-      padding: 10px 12px;
-      border-radius: 999px;
-      border: 1px solid rgba(31,31,31,.10);
-      background: rgba(255,255,255,.72);
-      backdrop-filter: blur(12px);
-      box-shadow: 0 16px 40px rgba(0,0,0,.08);
-    }
-    .ig-avatar{
-      width: 28px; height: 28px;
-      border-radius: 999px;
-      border: 1px solid rgba(31,31,31,.12);
-      background:
-        url("https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=200&q=70") center/cover;
-      filter: var(--img);
-    }
-    .ig-handle{
-      font-size: 12px;
-      color: var(--ink);
-      display:flex;
-      align-items:center;
-      gap:8px;
-      line-height:1;
-    }
-    .ig-handle small{
-      color: var(--muted);
-      font-size: 11px;
-    }
-
-    /* ===== ✅ 作品區：改成全寬作品牆（解決你說的太小） ===== */
+    /* ===== ✅ 內容區：全寬作品牆 ===== */
     .content{
       width: 100%;
       max-width: var(--max);
@@ -480,7 +457,6 @@
     .page.active{ display:block; }
     @keyframes fade{ from{opacity:0; transform:translateY(4px)} to{opacity:1; transform:none} }
 
-    /* ✅ 作品 Grid：桌機大方、手機自適應 */
     .works{
       display:grid;
       grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
@@ -507,7 +483,7 @@
       position:absolute; inset:0;
       background-size: cover;
       background-position:center;
-      filter: var(--img); /* ✅ 彩色 */
+      filter: var(--img);
       transform: scale(1.01);
       transition: transform .7s ease;
       opacity: .98;
@@ -564,7 +540,7 @@
     .modal-img{
       background-size: cover;
       background-position:center;
-      filter: var(--img); /* ✅ 彩色 */
+      filter: var(--img);
     }
     .modal-side{
       padding: 18px;
@@ -657,17 +633,105 @@
     }
     .ctrl:hover{ transform: translateY(-1px); }
 
+    /* ===== ✅ 浮動按鈕：IG / 賣貨便（旁邊）+ 回到頂部 ===== */
+    .fabs{
+      position: fixed;
+      right: 18px;
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 9990;
+      display:flex;
+      flex-direction:column;
+      gap: 12px;
+      pointer-events: none; /* 讓裡面的按鈕才可點 */
+    }
+    .fab{
+      pointer-events: auto;
+      display:flex;
+      align-items:center;
+      gap: 10px;
+      padding: 12px 14px;
+      border-radius: 999px;
+      border: 1px solid rgba(31,31,31,.12);
+      background: rgba(255,255,255,.78);
+      backdrop-filter: blur(12px);
+      box-shadow: 0 14px 30px rgba(0,0,0,.10);
+      text-decoration:none;
+      color: var(--ink);
+      font-size: 13px;
+      transition: .2s ease;
+      white-space: nowrap;
+    }
+    .fab:hover{ transform: translateY(-2px); }
+    .fab .ico{
+      width: 34px;
+      height: 34px;
+      border-radius: 999px;
+      display:grid;
+      place-items:center;
+      border: 1px solid rgba(183,123,132,.22);
+      background: rgba(214,161,168,.14);
+      color: #6f3c43;
+      font-weight: 700;
+      letter-spacing: .06em;
+      font-family: "Playfair Display", serif;
+    }
+    .fab small{
+      display:block;
+      color: rgba(31,31,31,.55);
+      font-size: 11px;
+      margin-top: 2px;
+    }
+
+    .toTop{
+      position: fixed;
+      right: 18px;
+      bottom: 18px;
+      z-index: 9990;
+      width: 50px;
+      height: 50px;
+      border-radius: 999px;
+      border: 1px solid rgba(31,31,31,.12);
+      background: rgba(255,255,255,.78);
+      backdrop-filter: blur(12px);
+      box-shadow: 0 14px 30px rgba(0,0,0,.10);
+      cursor:pointer;
+      display:grid;
+      place-items:center;
+      transition: .2s ease;
+      opacity: 0;
+      pointer-events: none;
+    }
+    .toTop.show{
+      opacity: 1;
+      pointer-events: auto;
+    }
+    .toTop:hover{ transform: translateY(-2px); }
+    .toTop span{
+      display:block;
+      width: 10px;
+      height: 10px;
+      border-left: 2px solid rgba(111,60,67,.85);
+      border-top: 2px solid rgba(111,60,67,.85);
+      transform: rotate(45deg) translateY(1px);
+    }
+
     /* Responsive */
     @media (max-width: 980px){
       body{ cursor:auto; }
-      .mini-card{ right: 10px; bottom: 50px; transform: scale(.95); transform-origin: bottom right; }
-      .ig-bubble{ left: 30px; top: 340px; }
-    }
-    @media (max-width: 560px){
-      .mini-card{ display:none; }
-      .ig-bubble{ left: 18px; top: 300px; transform: scale(.95); transform-origin:left center; }
       .ctrls{ display:none; }
-      .work{ min-height: 320px; }
+      .fabs{
+        right: 12px;
+        top: auto;
+        bottom: 86px;
+        transform: none;
+        gap: 10px;
+      }
+      .fab{
+        padding: 10px 12px;
+        font-size: 12px;
+      }
+      .fab .ico{ width: 32px; height: 32px; }
     }
 
     /* hover detection for cursor */
@@ -678,9 +742,34 @@
 <body>
   <div class="cursor" id="cursor" aria-hidden="true"></div>
 
+  <!-- ✅ 浮動連結按鈕 -->
+  <div class="fabs" aria-label="quick links">
+    <!-- IG：把 href 換成你的 IG -->
+    <a class="fab" href="https://instagram.com/" target="_blank" rel="noopener">
+      <div class="ico">IG</div>
+      <div>
+        Instagram
+        <small>最新作品 / 日常</small>
+      </div>
+    </a>
+
+    <!-- 賣貨便：把 href 換成你的賣貨便連結 -->
+    <a class="fab" href="https://myship.7-11.com.tw/" target="_blank" rel="noopener">
+      <div class="ico">買</div>
+      <div>
+        賣貨便
+        <small>立即下單</small>
+      </div>
+    </a>
+  </div>
+
+  <!-- ✅ 回到頂部 -->
+  <button class="toTop" id="toTop" aria-label="回到頂部">
+    <span aria-hidden="true"></span>
+  </button>
+
   <main class="wrap">
     <div class="decor" aria-hidden="true">
-      <img class="sakura sakura-tr" src="images/sakura-tr.png" alt="">
       <img class="sakura sakura-bl" src="images/sakura-bl.png" alt="">
       <div class="leaf-float l1"></div>
       <div class="leaf-float l2"></div>
@@ -719,36 +808,17 @@
           <div class="spark s2"></div>
           <div class="spark s3"></div>
 
-          <div class="ig-bubble">
-            <div class="ig-avatar" aria-hidden="true"></div>
-            <div class="ig-handle">
-              <span>komorebi.jewelry</span>
-              <small>•</small>
-              <small>handmade</small>
-            </div>
-          </div>
-
           <div class="mini-card" aria-label="mini info card">
             <div class="top"><div class="badge">K</div></div>
             <div class="body">
               <h3>Komorebi</h3>
               <p>日系手作飾品<br/>細緻線條｜可日常配戴</p>
             </div>
-            <svg class="twig" viewBox="0 0 160 120" xmlns="http://www.w3.org/2000/svg">
-              <g fill="none" stroke="rgba(31,31,31,.16)" stroke-width="2" stroke-linecap="round">
-                <path d="M10 110 C50 80, 70 70, 110 40 C130 26, 145 18, 156 10"/>
-                <path d="M66 68 C76 60, 86 56, 94 50"/>
-              </g>
-              <g>
-                <circle cx="66" cy="68" r="7" fill="rgba(184,154,98,.70)"/>
-                <circle cx="110" cy="40" r="6" fill="rgba(183,123,132,.55)"/>
-              </g>
-              <g fill="rgba(255,255,255,.75)" stroke="rgba(31,31,31,.12)" stroke-width="1">
-                <path d="M78 56c8-6 18-6 24 0c-5 11-9 16-12 18c-3-2-7-7-12-18z"/>
-              </g>
-            </svg>
           </div>
         </div>
+
+        <!-- ✅ 右上櫻花：疊在輪播拱門上 -->
+        <img class="sakura-overlay" src="images/sakura-tr.png" alt="" aria-hidden="true">
 
         <div class="ctrls">
           <button class="ctrl" id="prevBtn">上一張</button>
@@ -758,7 +828,6 @@
         <div class="dots" id="dots" aria-label="carousel dots"></div>
       </div>
 
-      <!-- ✅ 內容區（已改成全寬，作品區不會再很小） -->
       <div class="content">
         <div class="page active" id="page-about">
           <div class="card">
@@ -833,7 +902,7 @@
       cursor.classList.add("hidden");
     }
 
-    // ===== Custom cursor follow (dot+ring) =====
+    // ===== Custom cursor follow =====
     if (!isTouch) {
       let x = window.innerWidth / 2, y = window.innerHeight / 2;
       let tx = x, ty = y;
@@ -853,7 +922,7 @@
       }
       raf();
 
-      const hoverables = "a,button,.dot,.work";
+      const hoverables = "a,button,.dot,.work,.fab,.toTop";
       document.addEventListener("mouseover", (e) => {
         if (e.target.closest(hoverables)) cursor.classList.add("hover");
       });
@@ -874,16 +943,26 @@
       tabBtns.forEach(b => b.classList.toggle('active', b.dataset.tab === name));
       pageAbout.classList.toggle('active', name === 'about');
       pageWorks.classList.toggle('active', name === 'works');
-      // 切頁時自動滾到內容起點，視覺更順
       document.querySelector('.content')?.scrollIntoView({behavior:'smooth', block:'start'});
     }
     tabBtns.forEach(btn => btn.addEventListener('click', () => setTab(btn.dataset.tab)));
 
-    // ===== Carousel (彩色) =====
+    // ===== Back to top =====
+    const toTop = document.getElementById('toTop');
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > 280) toTop.classList.add('show');
+      else toTop.classList.remove('show');
+    }, {passive:true});
+
+    toTop.addEventListener('click', () => {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+
+    // ===== Carousel =====
     const images = [
-      "https://images.unsplash.com/photo-1522312346375-d1a52e2b99b3?auto=format&fit=crop&w=1400&q=70", // jewelry
-      "https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?auto=format&fit=crop&w=1400&q=70", // jewelry
-      "https://images.unsplash.com/photo-1535632787350-4e68efc2e44b?auto=format&fit=crop&w=1400&q=70"  // jewelry
+      "https://images.unsplash.com/photo-1522312346375-d1a52e2b99b3?auto=format&fit=crop&w=1400&q=70",
+      "https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?auto=format&fit=crop&w=1400&q=70",
+      "https://images.unsplash.com/photo-1535632787350-4e68efc2e44b?auto=format&fit=crop&w=1400&q=70"
     ];
 
     const slidesEl = document.getElementById("slides");
@@ -909,7 +988,6 @@
       if(!slides.length) return;
 
       current = (i + slides.length) % slides.length;
-
       slides.forEach(s => s.classList.toggle("active", Number(s.dataset.i) === current));
       dots.forEach(d => d.classList.toggle("active", Number(d.dataset.i) === current));
     }
@@ -942,7 +1020,7 @@
     document.getElementById("nextBtn").addEventListener("click", () => { next(); startAuto(); });
     document.getElementById("prevBtn").addEventListener("click", () => { prev(); startAuto(); });
 
-    // ===== Works data + modal (日系手作飾品文案) =====
+    // ===== Works + modal =====
     const works = [
       {
         title: "Sakura Dew Ring",
